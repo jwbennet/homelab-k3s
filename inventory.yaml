@@ -1,0 +1,24 @@
+---
+
+k3s_nodes:
+  hosts:
+    raspberrypi00:
+      ansible_user: ubuntu
+      ansible_host: 192.168.1.200
+      ansible_python_interpreter: /usr/bin/python3
+      k3s_control_node: true
+    raspberrypi01:
+      ansible_user: ubuntu
+      ansible_host: 192.168.1.201
+      ansible_python_interpreter: /usr/bin/python3
+      k3s_control_node: false
+    raspberrypi02:
+      ansible_user: ubuntu
+      ansible_host: 192.168.1.202
+      ansible_python_interpreter: /usr/bin/python3
+      k3s_control_node: false
+    raspberrypi03:
+      ansible_user: ubuntu
+      ansible_host: 192.168.1.203
+      ansible_python_interpreter: /usr/bin/python3
+      k3s_control_node: false

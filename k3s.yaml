@@ -1,0 +1,9 @@
+---
+
+- name: Build a k3s cluster with a single control node
+  hosts: k3s_nodes
+  vars:
+    k3s_become_for_all: true
+  roles:
+    - role: common
+    - role: xanmanning.k3s

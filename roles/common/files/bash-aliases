@@ -1,0 +1,2 @@
+alias sysinfo=/usr/share/landscape/landscape-sysinfo.wrapper
+alias kc=kubectl
