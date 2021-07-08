@@ -1,7 +1,6 @@
 .PHONY: install
 install: ## Install roles dependencies
 	@ansible-galaxy install -r requirements.yaml $(opts)
-	echo $(MAKEFILE_LIST)
 
 .PHONY: run
 run: ## Run playbook to setup Kubernetes cluster
