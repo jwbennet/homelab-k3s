@@ -1,0 +1,32 @@
+---
+
+- name: Fetch Cert-Manager Installation script
+  get_url:
+    url: "https://github.com/jetstack/cert-manager/releases/download/{{ cert_manager.version }}/cert-manager.yaml"
+    dest: /tmp/cert-manager.yaml
+- name: Update Cert-Manager script to use ARM versions of images
+  ansible.builtin.replace:
+    path: /tmp/cert-manager.yaml
+    regexp: '(image:((?!-arm).)*):(v.*)$'
+    replace: '\1-arm:\3'
+- name: Copy Cert-Manager Installation script into place
+  ansible.builtin.copy:
+    src: /tmp/cert-manager.yaml
+    dest: /var/lib/rancher/k3s/server/manifests/cert-manager.yaml
+    remote_src: yes
+- name: Install Traefik
+  ansible.builtin.template:
+    src: traefik.yaml.j2
+    dest: /var/lib/rancher/k3s/server/manifests/traefik-ingress.yaml
+- name: Install Traefik HTTPS Redirect Middleware
+  ansible.builtin.template:
+    src: traefik-https-redirect-middleware.yaml.j2
+    dest: /var/lib/rancher/k3s/server/manifests/traefik-https-redirect-middleware.yaml
+- name: Install Traefik HSTS Header Middleware
+  ansible.builtin.template:
+    src: traefik-hsts-header-middleware.yaml.j2
+    dest: /var/lib/rancher/k3s/server/manifests/traefik-hsts-header-middleware.yaml
+- name: Install Let's Encrypt Issuer
+  ansible.builtin.template:
+    src: letsencrypt-issuer.yaml.j2
+    dest: /var/lib/rancher/k3s/server/manifests/letsencrypt-issuer.yaml

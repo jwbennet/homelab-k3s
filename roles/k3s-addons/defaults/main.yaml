@@ -1,0 +1,6 @@
+---
+
+cert_manager:
+  version: v1.4.0
+olm:
+  version: v0.18.2

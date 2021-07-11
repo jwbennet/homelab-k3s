@@ -7,3 +7,9 @@
   roles:
     - role: common
     - role: xanmanning.k3s
+
+- name: Add k3s Addon Modules
+  hosts: raspberrypi00
+  become: yes
+  roles:
+    - role: k3s-addons

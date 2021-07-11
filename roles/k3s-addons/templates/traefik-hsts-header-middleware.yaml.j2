@@ -1,0 +1,11 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: hsts-header
+spec:
+  headers:
+    sslRedirect: true
+    stsSeconds: 31536000 # One year
+    stsIncludeSubdomains: true
+    stsPreload: true
+    forceSTSHeader: true
