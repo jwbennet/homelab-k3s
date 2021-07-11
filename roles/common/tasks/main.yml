@@ -14,10 +14,15 @@
   copy:
     src: files/bash-aliases
     dest: /home/ubuntu/.bash_aliases
+- name: Check if file which silences welcome message exists
+  ansible.builtin.stat:
+    path: /home/ubuntu/.hushlogin
+  register: hushlogin
 - name: Silence welcome message
   file:
     path: /home/ubuntu/.hushlogin
     state: touch
+  when: not hushlogin.stat.exists
 
 - name: Setup fan configuration
   copy:
