@@ -1,5 +1,23 @@
 ---
 
+- name: Install Operator Lifecycle Manager CRDs
+  get_url:
+    url: "https://github.com/operator-framework/operator-lifecycle-manager/releases/download/{{ olm.version }}/crds.yaml"
+    dest: /var/lib/rancher/k3s/server/manifests/olm-crds.yaml
+- name: Fetch Operator Lifecycle Manager Installation script
+  get_url:
+    url: "https://github.com/operator-framework/operator-lifecycle-manager/releases/download/{{ olm.version }}/olm.yaml"
+    dest: /tmp/olm-deployment.yaml
+- name: Update Operator Lifecycle Manager script to use ARM versions of images
+  ansible.builtin.replace:
+    path: /tmp/olm-deployment.yaml
+    regexp: '@sha256:.*$'
+    replace: ":{{ olm.version }}-arm64"
+- name: Copy Operator Lifecycle Manager Installation script into place
+  ansible.builtin.copy:
+    src: /tmp/olm-deployment.yaml
+    dest: /var/lib/rancher/k3s/server/manifests/olm-deployment.yaml
+    remote_src: yes
 - name: Fetch Cert-Manager Installation script
   get_url:
     url: "https://github.com/jetstack/cert-manager/releases/download/{{ cert_manager.version }}/cert-manager.yaml"
