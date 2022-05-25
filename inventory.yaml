@@ -2,7 +2,7 @@
 
 k3s_nodes:
   hosts:
-    raspberrypi00:
+    hla00:
       ansible_user: ubuntu
       ansible_host: 192.168.1.200
       ansible_python_interpreter: /usr/bin/python3
@@ -10,18 +10,26 @@ k3s_nodes:
       k3s_server:
         disable:
           - traefik
-    raspberrypi01:
+      update:
+        reboot_delay: 0
+    hla01:
       ansible_user: ubuntu
       ansible_host: 192.168.1.201
       ansible_python_interpreter: /usr/bin/python3
       k3s_control_node: false
-    raspberrypi02:
+      update:
+        reboot_delay: 30
+    hla02:
       ansible_user: ubuntu
       ansible_host: 192.168.1.202
       ansible_python_interpreter: /usr/bin/python3
       k3s_control_node: false
-    raspberrypi03:
+      update:
+        reboot_delay: 60
+    hla03:
       ansible_user: ubuntu
       ansible_host: 192.168.1.203
       ansible_python_interpreter: /usr/bin/python3
       k3s_control_node: false
+      update:
+        reboot_delay: 90

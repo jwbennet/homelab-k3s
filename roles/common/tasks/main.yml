@@ -4,7 +4,7 @@
   apt:
     name: [ 'emacs' ]
     state: latest
-  become: yes
+  become: true
 
 - name: Setup emacs configuration
   copy:
@@ -28,9 +28,9 @@
   copy:
     src: files/usercfg.txt
     dest: /boot/firmware/usercfg.txt
-  become: yes
+  become: true
 - name: Setup cgroup configuration
   copy:
     src: files/cmdline.txt
     dest: /boot/firmware/cmdline.txt
-  become: yes
+  become: true
