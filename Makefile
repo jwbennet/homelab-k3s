@@ -1,6 +1,6 @@
 .PHONY: install
 install: ## Install roles dependencies
-	@ansible-galaxy install -r requirements.yaml $(opts)
+	@ansible-galaxy install -r requirements.yaml --force $(opts)
 
 .PHONY: run
 run: ## Run playbook to setup Kubernetes cluster
@@ -16,7 +16,7 @@ inventory-list: ## Display the inventory as seen from Ansible
 
 .PHONY: lint
 lint: ## Check syntax of the playbook
-	@ansible-playbook --syntax-check $(opts) "k3s.yaml"
+	@ansible-playbook --syntax-check $(opts) "k3s.yaml" "os-update.yaml"
 
 .PHONY: start-cluster
 start-cluster: ## Start the k3s cluster
@@ -33,6 +33,10 @@ restart-cluster: ## Restart the k3s cluster
 .PHONE: shutdown-cluster
 shutdown-cluster: ## Shut down the k3s cluster nodes
 	@ansible all -a 'shutdown -h now' --become
+
+.PHONY: update-os-cluster
+update-os-cluster: ## Apply OS updates on the k3s cluster
+	@ansible-playbook os-update.yaml
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
