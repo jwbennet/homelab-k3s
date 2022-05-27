@@ -9,18 +9,18 @@
 - name: Setup emacs configuration
   copy:
     src: files/.emacs
-    dest: /home/ubuntu/.emacs
+    dest: /home/{{ ansible_user_id  }}/.emacs
 - name: Setup bash aliases
   copy:
     src: files/bash-aliases
-    dest: /home/ubuntu/.bash_aliases
+    dest: /home/{{ ansible_user_id  }}/.bash_aliases
 - name: Check if file which silences welcome message exists
   ansible.builtin.stat:
-    path: /home/ubuntu/.hushlogin
+    path: /home/{{ ansible_user_id  }}/.hushlogin
   register: hushlogin
 - name: Silence welcome message
   file:
-    path: /home/ubuntu/.hushlogin
+    path: /home/{{ ansible_user_id  }}/.hushlogin
     state: touch
   when: not hushlogin.stat.exists
 
@@ -29,8 +29,10 @@
     src: files/usercfg.txt
     dest: /boot/firmware/usercfg.txt
   become: true
+  when: ansible_architecture == 'aarch64'
 - name: Setup cgroup configuration
   copy:
     src: files/cmdline.txt
     dest: /boot/firmware/cmdline.txt
   become: true
+  when: ansible_architecture == 'aarch64'
