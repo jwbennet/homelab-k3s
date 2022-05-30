@@ -33,8 +33,8 @@ k3s_nodes:
       k3s_control_node: false
       update:
         reboot_delay: 90
-    hlx01:
-      ansible_user: jwbennet
+    hlx00:
+      ansible_user: ubuntu
       ansible_host: 192.168.1.210
       ansible_python_interpreter: /usr/bin/python3
       k3s_control_node: false
