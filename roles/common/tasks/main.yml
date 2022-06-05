@@ -5,7 +5,6 @@
     name: [ 'emacs' ]
     state: latest
   become: true
-
 - name: Setup emacs configuration
   copy:
     src: files/.emacs
@@ -24,6 +23,12 @@
     state: touch
   when: not hushlogin.stat.exists
 
+- name: Install rpi firmware and VLAN kernel packages
+  apt:
+    name: [ 'rpi-eeprom', 'linux-modules-extra-raspi' ]
+    state: latest
+  become: true
+  when: ansible_architecture == 'aarch64'
 - name: Setup fan configuration
   copy:
     src: files/usercfg.txt
