@@ -38,6 +38,10 @@ shutdown-cluster: ## Shut down the k3s cluster nodes
 update-os-cluster: ## Apply OS updates on the k3s cluster
 	@ansible-playbook os-update.yaml --ask-become-pass
 
+.PHONY: ping
+ping: ## Ping all nodes in the cluster to ensure SSH connections are working
+	@ansible all -m ping
+
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
