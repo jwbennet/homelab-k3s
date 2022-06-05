@@ -9,7 +9,7 @@
     - role: xanmanning.k3s
 
 - name: Add k3s Addon Modules
-  hosts: hla00
+  hosts: hlx00
   become: yes
   roles:
     - role: k3s-addons
