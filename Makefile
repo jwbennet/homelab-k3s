@@ -32,7 +32,7 @@ restart-cluster: ## Restart the k3s cluster
 
 .PHONE: shutdown-cluster
 shutdown-cluster: ## Shut down the k3s cluster nodes
-	@ansible all -a 'shutdown -h now' --become
+	@ansible all -a 'shutdown -h now' --become --ask-become-pass
 
 .PHONY: update-os-cluster
 update-os-cluster: ## Apply OS updates on the k3s cluster

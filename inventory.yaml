@@ -12,6 +12,13 @@ k3s_nodes:
           - traefik
       update:
         reboot_delay: 0
+    hlx01:
+      ansible_user: ubuntu
+      ansible_host: 10.0.3.1
+      ansible_python_interpreter: /usr/bin/python3
+      k3s_control_node: false
+      update:
+        reboot_delay: 30
     hla00:
       ansible_user: ubuntu
       ansible_host: 10.0.2.0
