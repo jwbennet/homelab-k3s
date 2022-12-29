@@ -20,15 +20,15 @@ lint: ## Check syntax of the playbook
 
 .PHONY: start-cluster
 start-cluster: ## Start the k3s cluster
-	@ansible-playbook k3s.yaml --become -e 'k3s_state=started'
+	@ansible-playbook k3s.yaml --become -e 'k3s_state=started' --ask-become-pass
 
 .PHONY: stop-cluster
 stop-cluster: ## Stop the k3s cluster
-	@ansible-playbook k3s.yaml --become -e 'k3s_state=stopped'
+	@ansible-playbook k3s.yaml --become -e 'k3s_state=stopped' --ask-become-pass
 
 .PHONY: restart-cluster
 restart-cluster: ## Restart the k3s cluster
-	@ansible-playbook k3s.yaml --become -e 'k3s_state=restarted'
+	@ansible-playbook k3s.yaml --become -e 'k3s_state=restarted' --ask-become-pass
 
 .PHONE: shutdown-cluster
 shutdown-cluster: ## Shut down the k3s cluster nodes
