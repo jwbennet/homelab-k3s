@@ -1,0 +1,4 @@
+---
+ansible_host: 10.0.3.1
+update:
+  reboot_delay: 60

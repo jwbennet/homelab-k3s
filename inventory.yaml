@@ -1,59 +1,15 @@
 ---
 
 k3s_nodes:
-  hosts:
-    hlx00:
-      ansible_user: ubuntu
-      ansible_host: 10.0.3.0
-      ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: true
-      k3s_etcd_datastore: true
-      k3s_server:
-        disable:
-          - traefik
-      update:
-        reboot_delay: 0
-    hlx01:
-      ansible_user: ubuntu
-      ansible_host: 10.0.3.1
-      ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: true
-      k3s_etcd_datastore: true
-      update:
-        reboot_delay: 60
-    hlx02:
-      ansible_user: ubuntu
-      ansible_host: 10.0.3.2
-      ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: true
-      k3s_etcd_datastore: true
-      update:
-        reboot_delay: 90
-    hla00:
-      ansible_user: ubuntu
-      ansible_host: 10.0.2.0
-      ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: false
-      update:
-        reboot_delay: 30
-    hla01:
-      ansible_user: ubuntu
-      ansible_host: 10.0.2.1
-      ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: false
-      update:
-        reboot_delay: 60
-    hla02:
-      ansible_user: ubuntu
-      ansible_host: 10.0.2.2
-      ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: false
-      update:
-        reboot_delay: 90
-    hla03:
-      ansible_user: ubuntu
-      ansible_host: 10.0.2.3
-      ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: false
-      update:
-        reboot_delay: 120
+  children:
+    k3s_servers:
+      hosts:
+        homelabx00:
+        homelabx01:
+        homelabx02:
+    k3s_agents:
+      hosts:
+        homelaba00:
+        homelaba01:
+        homelaba02:
+        homelaba03:
