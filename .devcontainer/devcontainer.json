@@ -5,8 +5,13 @@
   "image": "mcr.microsoft.com/devcontainers/python:0-3.11",
 	"features": {
     "ghcr.io/devcontainers-contrib/features/ansible:1": {},
-    "ghcr.io/rio/features/chezmoi:1": {}
+    "ghcr.io/rio/features/chezmoi:1": {},
+    "ghcr.io/rio/features/k9s:1": {},
+    "ghcr.io/devcontainers-contrib/features/kubectl-asdf:2": {}
 	},
+  "mounts": [
+		"source=${env:HOME}${env:USERPROFILE}/.kube,target=/home/vscode/.kube,type=bind"
+	],
   "postCreateCommand": "make install",
 	"customizations": {
     "vscode": {
