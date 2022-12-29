@@ -7,6 +7,7 @@ k3s_nodes:
       ansible_host: 10.0.3.0
       ansible_python_interpreter: /usr/bin/python3
       k3s_control_node: true
+      k3s_etcd_datastore: true
       k3s_server:
         disable:
           - traefik
@@ -16,9 +17,18 @@ k3s_nodes:
       ansible_user: ubuntu
       ansible_host: 10.0.3.1
       ansible_python_interpreter: /usr/bin/python3
-      k3s_control_node: false
+      k3s_control_node: true
+      k3s_etcd_datastore: true
       update:
-        reboot_delay: 30
+        reboot_delay: 60
+    hlx02:
+      ansible_user: ubuntu
+      ansible_host: 10.0.3.2
+      ansible_python_interpreter: /usr/bin/python3
+      k3s_control_node: true
+      k3s_etcd_datastore: true
+      update:
+        reboot_delay: 90
     hla00:
       ansible_user: ubuntu
       ansible_host: 10.0.2.0
