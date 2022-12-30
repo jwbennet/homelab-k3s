@@ -1,10 +1,11 @@
 .PHONY: install
 install: ## Install roles dependencies
+	@pip install --user ansible-lint
 	@ansible-galaxy install -r requirements.yaml --force $(opts)
 
 .PHONY: run
 run: ## Run playbook to setup Kubernetes cluster
-	@ansible-playbook k3s.yaml --ask-become-pass
+	@ansible-playbook k3s.yaml
 
 .PHONY: inventory-graph
 inventory-graph: ## Display the inventory as seen from Ansible
@@ -20,23 +21,23 @@ lint: ## Check syntax of the playbook
 
 .PHONY: start-cluster
 start-cluster: ## Start the k3s cluster
-	@ansible-playbook k3s.yaml --become -e 'k3s_state=started' --ask-become-pass
+	@ansible-playbook k3s.yaml --become -e 'k3s_state=started'
 
 .PHONY: stop-cluster
 stop-cluster: ## Stop the k3s cluster
-	@ansible-playbook k3s.yaml --become -e 'k3s_state=stopped' --ask-become-pass
+	@ansible-playbook k3s.yaml --become -e 'k3s_state=stopped'
 
 .PHONY: restart-cluster
 restart-cluster: ## Restart the k3s cluster
-	@ansible-playbook k3s.yaml --become -e 'k3s_state=restarted' --ask-become-pass
+	@ansible-playbook k3s.yaml --become -e 'k3s_state=restarted'
 
 .PHONE: shutdown-cluster
 shutdown-cluster: ## Shut down the k3s cluster nodes
-	@ansible all -a 'shutdown -h now' --become --ask-become-pass
+	@ansible all -a 'shutdown -h now' --become
 
 .PHONY: update-os-cluster
 update-os-cluster: ## Apply OS updates on the k3s cluster
-	@ansible-playbook os-update.yaml --ask-become-pass
+	@ansible-playbook os-update.yaml
 
 .PHONY: ping
 ping: ## Ping all nodes in the cluster to ensure SSH connections are working

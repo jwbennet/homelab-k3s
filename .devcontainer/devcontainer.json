@@ -10,8 +10,12 @@
     "ghcr.io/devcontainers-contrib/features/kubectl-asdf:2": {}
 	},
   "mounts": [
-		"source=${env:HOME}${env:USERPROFILE}/.kube,target=/home/vscode/.kube,type=bind"
+		"source=${env:HOME}${env:USERPROFILE}/.kube,target=/home/vscode/.kube,type=bind",
+    "source=${env:ANSIBLE_VAULT_PASSWORD_FILE},target=/home/vscode/.ansible-vault,type=bind"
 	],
+  "containerEnv": {
+    "ANSIBLE_VAULT_PASSWORD_FILE": "/home/vscode/.ansible-vault"
+  },
   "postCreateCommand": "make install",
 	"customizations": {
     "vscode": {
