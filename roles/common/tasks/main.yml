@@ -1,43 +1,49 @@
 ---
 
 - name: Install common packages
-  apt:
-    name: [ 'emacs' ]
-    state: latest
+  ansible.builtin.apt:
+    name: ['emacs']
+    state: present
   become: true
 - name: Setup emacs configuration
-  copy:
+  ansible.builtin.copy:
     src: files/.emacs
-    dest: /home/{{ ansible_user_id  }}/.emacs
+    dest: /home/{{ ansible_user_id }}/.emacs
+    mode: 0600
 - name: Setup bash aliases
-  copy:
+  ansible.builtin.copy:
     src: files/bash-aliases
-    dest: /home/{{ ansible_user_id  }}/.bash_aliases
+    dest: /home/{{ ansible_user_id }}/.bash_aliases
+    mode: 0600
 - name: Check if file which silences welcome message exists
   ansible.builtin.stat:
-    path: /home/{{ ansible_user_id  }}/.hushlogin
+    path: /home/{{ ansible_user_id }}/.hushlogin
   register: hushlogin
 - name: Silence welcome message
-  file:
-    path: /home/{{ ansible_user_id  }}/.hushlogin
+  ansible.builtin.file:
+    path: /home/{{ ansible_user_id }}/.hushlogin
+    mode: 0600
     state: touch
   when: not hushlogin.stat.exists
 
 - name: Install rpi firmware and VLAN kernel packages
-  apt:
-    name: [ 'rpi-eeprom', 'linux-modules-extra-raspi' ]
-    state: latest
+  ansible.builtin.apt:
+    name: ['rpi-eeprom', 'linux-modules-extra-raspi']
+    state: present
   become: true
   when: ansible_architecture == 'aarch64'
 - name: Setup fan configuration
-  copy:
+  ansible.builtin.copy:
     src: files/usercfg.txt
     dest: /boot/firmware/usercfg.txt
+    mode: 0600
   become: true
   when: ansible_architecture == 'aarch64'
 - name: Setup cgroup configuration
-  copy:
+  ansible.builtin.copy:
     src: files/cmdline.txt
     dest: /boot/firmware/cmdline.txt
+    mode: 0600
+
   become: true
   when: ansible_architecture == 'aarch64'

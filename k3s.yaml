@@ -1,6 +1,6 @@
 ---
 
-- name: Build a k3s cluster with a single control node
+- name: Build a k3s cluster in high availability mode
   hosts: k3s_nodes
   vars:
     k3s_become: true
@@ -15,6 +15,6 @@
 
 - name: Add k3s Addon Modules
   hosts: homelabx00
-  become: yes
+  become: true
   roles:
     - role: k3s-addons

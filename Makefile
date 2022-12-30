@@ -17,7 +17,7 @@ inventory-list: ## Display the inventory as seen from Ansible
 
 .PHONY: lint
 lint: ## Check syntax of the playbook
-	@ansible-playbook --syntax-check $(opts) "k3s.yaml" "os-update.yaml"
+	@ansible-lint
 
 .PHONY: start-cluster
 start-cluster: ## Start the k3s cluster
