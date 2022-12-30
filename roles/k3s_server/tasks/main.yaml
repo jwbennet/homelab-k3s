@@ -12,16 +12,31 @@
       auth: "{{ kubeapi_keepalived_auth }}"
       is_master: "{{ lookup('ansible.utils.index_of', groups['k3s_servers'] | sort, 'eq', inventory_hostname) == 0 }}"
       priority: "{{ 150 - lookup('ansible.utils.index_of', groups['k3s_servers'] | sort, 'eq', inventory_hostname) * 5 }}"
+      config_dir: /etc/keepalived
       version: "{{ keepalived_version }}"
       check: "check_kubeapiserver"
   block:
+    - name: Ensure keepalived configuration directory exists
+      ansible.builtin.file:
+        path: "{{ keepalived.config_dir }}"
+        state: directory
+        mode: 0600
+      become: true
     - name: Deploy keepalived configuration
       ansible.builtin.template:
         src: keepalived.conf.j2
-        dest: "/etc/keepalived/{{ keepalived.id }}.conf"
+        dest: "{{ keepalived.config_dir }}/{{ keepalived.id }}.conf"
         mode: 0600
         trim_blocks: false
       become: true
+    - name: Deploy keepalived service check
+      ansible.builtin.template:
+        src: "{{ keepalived.check }}.sh.j2"
+        dest: "{{ keepalived.config_dir }}/{{ keepalived.check }}.sh"
+        mode: 0700
+        trim_blocks: false
+      become: true
+      when: keepalived.check is defined and keepalived.check | length
     - name: Deploy keepalived static pod to Kubernetes
       ansible.builtin.template:
         src: kube-keepalived.yaml.j2
@@ -29,11 +44,34 @@
         mode: 0600
         trim_blocks: false
       become: true
-    - name: Deploy keepalived service check
-      ansible.builtin.template:
-        src: "{{ keepalived.check }}.sh.j2"
-        dest: "/etc/keepalived/{{ keepalived.check }}.sh"
-        mode: 0700
-        trim_blocks: false
-      become: true
-      when: keepalived.check is defined and keepalived.check | length
+
+- name: Set haproxy backends fact
+  ansible.builtin.set_fact:
+    haproxy:
+      source_port: 6443
+      target_port: 8443
+      backends: "{{ haproxy['backends'] | default([]) + [{'hostname': item.inventory_hostname, 'ip': item.ansible_host}] }}"
+      config_dir: /etc/haproxy
+      version: "{{ haproxy_version }}"
+  loop: "{{ groups['k3s_servers'] | map('extract', hostvars) }}"
+  no_log: true
+- name: Ensure haproxy configuration directory exists
+  ansible.builtin.file:
+    path: "{{ haproxy.config_dir }}"
+    state: directory
+    mode: 0600
+  become: true
+- name: Deploy haproxy configuration
+  ansible.builtin.template:
+    src: kubeapi-haproxy.cfg.j2
+    dest: "{{ haproxy.config_dir }}/kubeapi-lb.cfg"
+    mode: 0600
+    trim_blocks: false
+  become: true
+- name: Deploy Kubernetes API load balancer
+  ansible.builtin.template:
+    src: kube-kubeapi-lb.yaml.j2
+    dest: "/var/lib/rancher/k3s/agent/pod-manifests/kubeapi-lb.yaml"
+    mode: 0600
+    trim_blocks: false
+  become: true

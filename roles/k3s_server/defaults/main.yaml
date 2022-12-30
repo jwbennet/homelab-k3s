@@ -1,3 +1,4 @@
 ---
 
 keepalived_version: 2.0.20
+haproxy_version: 2.1.4

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubeapi-haproxy
+  namespace: kube-system
+spec:
+  containers:
+  - image: haproxy:{{ haproxy.version }}
+    name: haproxy
+    livenessProbe:
+      failureThreshold: 8
+      tcpSocket:
+        port: {{ haproxy.target_port }}
+    volumeMounts:
+    - mountPath: /usr/local/etc/haproxy/haproxy.cfg
+      name: haproxyconf
+      readOnly: true
+  hostNetwork: true
+  volumes:
+  - hostPath:
+      path: /etc/haproxy/kubeapi-lb.cfg
+      type: FileOrCreate
+    name: haproxyconf
