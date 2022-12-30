@@ -8,8 +8,13 @@
     - role: common
     - role: xanmanning.k3s
 
+- name: Add additional components to Kubernetes control plane
+  hosts: k3s_servers
+  roles:
+    - role: k3s-server
+
 - name: Add k3s Addon Modules
-  hosts: hlx00
+  hosts: homelabx00
   become: yes
   roles:
     - role: k3s-addons

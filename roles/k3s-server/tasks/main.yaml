@@ -1,0 +1,45 @@
+---
+
+- name: Deploy Kubernetes API keepalived configuration
+  vars:
+    keepalived:
+      id: kubeapi-keepalived
+      router_id: 55
+      vip: "10.0.4.0"
+      interface: "{{ ansible_facts.default_ipv4.alias }}"
+      address: "{{ ansible_facts.default_ipv4.address }}"
+      peers: "{{ groups['k3s_servers'] | map('extract', hostvars, ['ansible_host']) | reject('search', ansible_facts.default_ipv4.address) }}"
+      auth: !vault |
+        $ANSIBLE_VAULT;1.1;AES256
+        63306337333162616363633539306661666434653037616430303236643162313763613738626334
+        6266663363623439633339623938633466613064353362610a356333656431353739373330376138
+        34366361643439363436363438656237363031396439393832666332363930663930663631316437
+        6464346163316463390a386332353738306237663835616364633364336561343035313165353666
+        6533
+      is_master: "{{ lookup('ansible.utils.index_of', groups['k3s_servers'] | sort, 'eq', inventory_hostname) == 0 }}"
+      priority: "{{ 150 - lookup('ansible.utils.index_of', groups['k3s_servers'] | sort, 'eq', inventory_hostname) * 5 }}"
+      version: "{{ keepalived_version }}"
+      check: "check_kubeapiserver"
+  block:
+    - name: Deploy keepalived configuration
+      ansible.builtin.template:
+        src: keepalived.conf.j2
+        dest: "/etc/keepalived/{{ keepalived.id }}.conf"
+        mode: 0600
+        trim_blocks: false
+      become: true
+    - name: Deploy keepalived static pod to Kubernetes
+      ansible.builtin.template:
+        src: kube-keepalived.yaml.j2
+        dest: "/var/lib/rancher/k3s/agent/pod-manifests/{{ keepalived.id }}.yaml"
+        mode: 0600
+        trim_blocks: false
+      become: true
+    - name: Deploy keepalived service check
+      ansible.builtin.template:
+        src: "{{ keepalived.check }}.sh.j2"
+        dest: "/etc/keepalived/{{ keepalived.check }}.sh"
+        mode: 0700
+        trim_blocks: false
+      become: true
+      when: keepalived.check is defined and keepalived.check | length

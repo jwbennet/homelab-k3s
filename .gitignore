@@ -1,4 +1,5 @@
 /roles/*
 !/roles/common
 !/roles/k3s-addons
+!/roles/k3s-server
 **/secrets.yaml

@@ -1,0 +1,43 @@
+! Based on https://github.com/kubernetes/kubeadm/blob/main/docs/ha-considerations.md#options-for-software-load-balancing
+global_defs {
+  router_id {{keepalived.id | regex_replace('-keepalived$', '')}}-dns-01
+  script_user root
+}
+
+{% if keepalived.check is defined and keepalived.check | length %}
+vrrp_script {{ keepalived.check }} {
+  script "/etc/keepalived/check.sh"
+  interval 3
+  weight -2
+  fall 10
+  rise 2
+}
+{% endif %}
+
+vrrp_instance {{ keepalived.id | regex_replace('-keepalived$', '') | upper }} {
+  state {{ keepalived.is_master | ternary('MASTER', 'BACKUP') }}
+  interface {{ keepalived.interface }}
+  virtual_router_id {{ keepalived.router_id }}
+  priority {{ keepalived.priority }}
+  advert_int 1
+  unicast_src_ip {{ keepalived.address }}
+  unicast_peer {
+    {{ keepalived.peers | join("\n    ") }}
+  }
+
+  authentication {
+    auth_type PASS
+    auth_pass {{ keepalived.auth }}
+  }
+
+  virtual_ipaddress {
+    {{ keepalived.vip }}
+  }
+
+  {% if keepalived.check is defined and keepalived.check | length %}
+  track_script {
+    {{ keepalived.check }}
+  }
+  {% endif %}
+
+}

@@ -1,0 +1,33 @@
+# Based on https://github.com/kubernetes/kubeadm/blob/main/docs/ha-considerations.md#options-for-software-load-balancing
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ keepalived.id }}
+  namespace: kube-system
+spec:
+  containers:
+  - image: osixia/keepalived:{{ keepalived.version }}
+    name: keepalived
+    securityContext:
+      capabilities:
+        add:
+        - NET_ADMIN
+        - NET_BROADCAST
+        - NET_RAW
+    volumeMounts:
+    - mountPath: /usr/local/etc/keepalived/keepalived.conf
+      name: config
+    {%- if keepalived.check is defined and keepalived.check | length %}
+    - mountPath: /etc/keepalived/check.sh
+      name: check
+    {%- endif %}
+  hostNetwork: true
+  volumes:
+  - hostPath:
+      path: /etc/keepalived/{{ keepalived.id }}.conf
+    name: config
+  {%- if keepalived.check is defined and keepalived.check | length %}
+  - hostPath:
+      path: /etc/keepalived/{{ keepalived.check }}.sh
+    name: check
+  {%- endif %}
