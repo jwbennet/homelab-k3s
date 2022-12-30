@@ -23,7 +23,12 @@
         "ms-vscode.makefile-tools",
         "redhat.ansible",
         "redhat.vscode-yaml"
-      ]
+      ],
+      "settings": {
+        "yaml.customTags": [
+          "!vault scalar"
+        ]
+      }
     }
   }
 }
