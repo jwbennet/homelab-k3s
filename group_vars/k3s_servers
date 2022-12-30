@@ -1,7 +1,9 @@
 ---
 k3s_control_node: true
 k3s_etcd_datastore: true
+k3s_use_experimental: true
 k3s_server:
+  secrets-encryption: true
   disable:
     - traefik
 kubeapi_keepalived_auth: !vault |
