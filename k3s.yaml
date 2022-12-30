@@ -11,10 +11,10 @@
 - name: Add additional components to Kubernetes control plane
   hosts: k3s_servers
   roles:
-    - role: k3s-server
+    - role: k3s_server
 
 - name: Add k3s Addon Modules
   hosts: homelabx00
   become: true
   roles:
-    - role: k3s-addons
+    - role: k3s_addons
