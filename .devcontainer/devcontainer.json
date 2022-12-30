@@ -20,6 +20,7 @@
 	"customizations": {
     "vscode": {
       "extensions": [
+        "editorconfig.editorconfig",
         "ms-vscode.makefile-tools",
         "redhat.ansible",
         "redhat.vscode-yaml"
