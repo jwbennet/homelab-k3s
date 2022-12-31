@@ -2,34 +2,35 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
 	"name": "Ansible",
-  "image": "mcr.microsoft.com/devcontainers/python:0-3.11",
+    "image": "mcr.microsoft.com/devcontainers/python:0-3.11",
 	"features": {
-    "ghcr.io/devcontainers-contrib/features/ansible:1": {},
-    "ghcr.io/rio/features/chezmoi:1": {},
-    "ghcr.io/rio/features/k9s:1": {},
-    "ghcr.io/devcontainers-contrib/features/kubectl-asdf:2": {}
+        "ghcr.io/devcontainers-contrib/features/ansible:1": {},
+        "ghcr.io/rio/features/chezmoi:1": {},
+        "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+        "ghcr.io/rio/features/k9s:1": {}
 	},
-  "mounts": [
+    "mounts": [
 		"source=${env:HOME}${env:USERPROFILE}/.kube,target=/home/vscode/.kube,type=bind",
-    "source=${env:ANSIBLE_VAULT_PASSWORD_FILE},target=/home/vscode/.ansible-vault,type=bind"
+        "source=${env:ANSIBLE_VAULT_PASSWORD_FILE},target=/home/vscode/.ansible-vault,type=bind"
 	],
-  "containerEnv": {
-    "ANSIBLE_VAULT_PASSWORD_FILE": "/home/vscode/.ansible-vault"
-  },
-  "postCreateCommand": "make install",
+    "containerEnv": {
+        "ANSIBLE_VAULT_PASSWORD_FILE": "/home/vscode/.ansible-vault",
+        "K8S_AUTH_KUBECONFIG": "/home/vscode/.kube/config"
+    },
+    "postCreateCommand": "make install",
 	"customizations": {
-    "vscode": {
-      "extensions": [
-        "editorconfig.editorconfig",
-        "ms-vscode.makefile-tools",
-        "redhat.ansible",
-        "redhat.vscode-yaml"
-      ],
-      "settings": {
-        "yaml.customTags": [
-          "!vault scalar"
-        ]
-      }
+        "vscode": {
+            "extensions": [
+                "editorconfig.editorconfig",
+                "ms-vscode.makefile-tools",
+                "redhat.ansible",
+                "redhat.vscode-yaml"
+            ],
+            "settings": {
+                "yaml.customTags": [
+                    "!vault scalar"
+                ]
+            }
+        }
     }
-  }
 }
