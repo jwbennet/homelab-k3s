@@ -36,33 +36,6 @@
     src: letsencrypt-issuer.yaml.j2
     dest: /var/lib/rancher/k3s/server/manifests/letsencrypt-issuer.yaml
     mode: 0600
-- name: Install Rook CRDs
-  ansible.builtin.template:
-    src: rook-crds.yaml.j2
-    dest: /var/lib/rancher/k3s/server/manifests/rook-crds.yaml
-    mode: 0600
-- name: Install Rook Common Objects
-  ansible.builtin.template:
-    src: rook-common.yaml.j2
-    dest: /var/lib/rancher/k3s/server/manifests/rook-common.yaml
-    mode: 0600
-- name: Install Rook Operator
-  ansible.builtin.template:
-    src: rook-operator.yaml.j2
-    dest: /var/lib/rancher/k3s/server/manifests/rook-operator.yaml
-    mode: 0600
-- name: Configure Ceph Cluster
-  ansible.builtin.template:
-    src: ceph-cluster.yaml.j2
-    dest: /var/lib/rancher/k3s/server/manifests/ceph-cluster.yaml
-    mode: 0600
-- name: Install Ceph Toolbox
-  ansible.builtin.template:
-    src: ceph-toolbox.yaml.j2
-    dest: /var/lib/rancher/k3s/server/manifests/ceph-toolbox.yaml
-    mode: 0600
-- name: Setup Ceph Block StorageClass
-  ansible.builtin.template:
-    src: ceph-block-storage-class.yaml.j2
-    dest: /var/lib/rancher/k3s/server/manifests/ceph-block-storage-class.yaml
-    mode: 0600
+- name: Configure Rook for managing Ceph storage
+  ansible.builtin.import_tasks: rook.yaml
+  when: setup_rook

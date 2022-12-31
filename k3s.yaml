@@ -18,3 +18,5 @@
   become: true
   roles:
     - role: k3s_addons
+  vars:
+    setup_rook: true

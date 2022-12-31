@@ -4,3 +4,5 @@ cert_manager:
   version: v1.8.0
 olm:
   version: v0.21.2
+
+setup_rook: false

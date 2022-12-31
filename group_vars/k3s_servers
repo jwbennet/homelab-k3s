@@ -4,6 +4,8 @@ k3s_etcd_datastore: true
 k3s_use_experimental: true
 k3s_server:
   secrets-encryption: true
+  node-label:
+    - "inpulsetech.io/storage=true"
   disable:
     - traefik
 kubeapi_keepalived_auth: !vault |
