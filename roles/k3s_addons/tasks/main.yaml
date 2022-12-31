@@ -5,11 +5,6 @@
     url: "https://github.com/jetstack/cert-manager/releases/download/{{ cert_manager.version }}/cert-manager.yaml"
     dest: /tmp/cert-manager.yaml
     mode: 0600
-- name: Update Cert-Manager script to use ARM versions of images
-  ansible.builtin.replace:
-    path: /tmp/cert-manager.yaml
-    regexp: '(image:((?!-arm).)*):(v.*)$'
-    replace: '\1-arm:\3'
 - name: Copy Cert-Manager Installation script into place
   ansible.builtin.copy:
     src: /tmp/cert-manager.yaml
