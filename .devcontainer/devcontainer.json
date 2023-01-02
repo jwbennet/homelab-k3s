@@ -10,7 +10,7 @@
         "ghcr.io/rio/features/k9s:1": {}
 	},
     "mounts": [
-		"source=${env:HOME}${env:USERPROFILE}/.kube,target=/home/vscode/.kube,type=bind",
+        "source=${env:HOME}${env:USERPROFILE}/.kube,target=/home/vscode/.kube,type=bind",
         "source=${env:ANSIBLE_VAULT_PASSWORD_FILE},target=/home/vscode/.ansible-vault,type=bind"
 	],
     "containerEnv": {
