@@ -25,7 +25,10 @@ spec:
     rbac:
       enabled: true
     ports:
+      web:
+        nodePort: 32080
       websecure:
+        nodePort: 32443
         tls:
           enabled: true
     podAnnotations:
