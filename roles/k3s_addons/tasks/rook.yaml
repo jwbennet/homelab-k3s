@@ -44,3 +44,8 @@
     src: ceph-block-storage-class.yaml.j2
     dest: /var/lib/rancher/k3s/server/manifests/ceph-block-storage-class.yaml
     mode: 0600
+- name: Setup Ceph File StorageClass
+  ansible.builtin.template:
+    src: ceph-file-storage-class.yaml.j2
+    dest: /var/lib/rancher/k3s/server/manifests/ceph-file-storage-class.yaml
+    mode: 0600
